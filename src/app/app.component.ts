@@ -5,12 +5,10 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-    public liveStreamUrl: string;
-    constructor() {}
+    constructor() { }
 
     ngOnInit() {
-        this.liveStreamUrl = "https://youtu.be/a3ICNMQW7Ok";
     }
-   
+
 
 }
