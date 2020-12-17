@@ -12,6 +12,6 @@ export class DashboardComponent implements OnInit {
   }
 
   navigateToScreen(url: string) {
-    this.router.navigate([`dashboard/${url}`]);
+    this.router.navigateByUrl(`dashboard/${url}`);
   }
 }

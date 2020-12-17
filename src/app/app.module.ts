@@ -38,6 +38,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './features/login/login.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { WebCamLiveComponent } from './features/webcam-live/webcam-live.component';
+import { DroneLiveComponent } from './features/drone-live/drone-live.component';
 const materialModules = [
   MatAutocompleteModule,
   MatButtonModule,
@@ -74,7 +75,8 @@ const materialModules = [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    WebCamLiveComponent
+    WebCamLiveComponent,
+    DroneLiveComponent
   ],
   imports: [
     BrowserModule,

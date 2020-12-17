@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth-guard.service';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { LoginComponent } from './features/login/login.component';
+import { DroneLiveComponent } from './features/drone-live/drone-live.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -16,7 +17,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     component: DashboardComponent,
     children: [
-      { path: 'webcamLive', component: WebCamLiveComponent }
+      { path: 'webcamLive', component: WebCamLiveComponent },
+      { path: 'droneLive', component: DroneLiveComponent }
     ]
   },
 ];
