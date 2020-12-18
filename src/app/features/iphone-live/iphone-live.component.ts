@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import videojs from 'video.js';
 @Component({
-  selector: 'app-drone-live',
-  templateUrl: './drone-live.component.html',
-  styleUrls: ['./drone-live.component.scss']
+  selector: 'app-iphone-live',
+  templateUrl: './iphone-live.component.html',
+  styleUrls: ['./iphone-live.component.scss']
 })
-export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
+export class IphoneLiveComponent implements OnInit, AfterViewInit, OnDestroy{
   @ViewChild("droneVideo", { static: true }) public droneVideoElem: ElementRef;
   public droneLiveUrl: string;
   private player;
@@ -14,7 +14,7 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     this.droneLiveUrl = 'https://www.youtube.com/watch?v=dwhFIfdjK8A&feature=youtu.be';
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(){
     const options = {
       controls: true,
       autoplay: true,

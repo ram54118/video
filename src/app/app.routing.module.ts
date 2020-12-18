@@ -5,6 +5,7 @@ import { AuthGuard } from './auth-guard.service';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { LoginComponent } from './features/login/login.component';
 import { DroneLiveComponent } from './features/drone-live/drone-live.component';
+import { IphoneLiveComponent } from './features/iphone-live/iphone-live.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -14,11 +15,12 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    canActivate: [AuthGuard],
+   // canActivate: [AuthGuard],
     component: DashboardComponent,
     children: [
       { path: 'webcamLive', component: WebCamLiveComponent },
-      { path: 'droneLive', component: DroneLiveComponent }
+      { path: 'droneLive', component: DroneLiveComponent },
+      { path: 'iPhoneLive', component: IphoneLiveComponent }
     ]
   },
 ];

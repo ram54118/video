@@ -39,6 +39,7 @@ import { LoginComponent } from './features/login/login.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { WebCamLiveComponent } from './features/webcam-live/webcam-live.component';
 import { DroneLiveComponent } from './features/drone-live/drone-live.component';
+import { IphoneLiveComponent } from './features/iphone-live/iphone-live.component';
 const materialModules = [
   MatAutocompleteModule,
   MatButtonModule,
@@ -76,7 +77,8 @@ const materialModules = [
     LoginComponent,
     DashboardComponent,
     WebCamLiveComponent,
-    DroneLiveComponent
+    DroneLiveComponent,
+    IphoneLiveComponent
   ],
   imports: [
     BrowserModule,
