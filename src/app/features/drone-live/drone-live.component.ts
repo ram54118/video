@@ -13,6 +13,7 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor() { }
   ngOnInit() {
     const liveurls = (data as any).default;
+    console.log('liveurls', liveurls);
     this.droneLiveUrl = liveurls ? liveurls.droneLiveUrl : null;
   }
 

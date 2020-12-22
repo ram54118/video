@@ -18,7 +18,7 @@ export class WebCamLiveComponent implements OnInit {
   private recordedBlobs = [];
   private currentStream;
   private mediaRecorder;
-  private recordingStarted = false;
+  public recordingStarted = false;
   constructor(private renderer: Renderer2) { }
 
   ngOnInit() {
