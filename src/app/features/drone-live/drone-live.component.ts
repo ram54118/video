@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import * as data from './../../../assets/configuration/config.json';
 import videojs from 'video.js';
 @Component({
   selector: 'app-drone-live',
@@ -11,7 +12,8 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
   private player;
   constructor() { }
   ngOnInit() {
-    this.droneLiveUrl = 'https://www.youtube.com/watch?v=dwhFIfdjK8A&feature=youtu.be';
+    const liveurls = (data as any).default;
+    this.droneLiveUrl = liveurls ? liveurls.droneLiveUrl : null;
   }
 
   ngAfterViewInit() {

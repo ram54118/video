@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+
 declare const MediaRecorder: any;
 @Component({
   selector: 'app-webcam-live',
@@ -18,7 +19,6 @@ export class WebCamLiveComponent implements OnInit {
   private currentStream;
   private mediaRecorder;
   private recordingStarted = false;
-
   constructor(private renderer: Renderer2) { }
 
   ngOnInit() {

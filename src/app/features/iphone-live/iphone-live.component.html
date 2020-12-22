@@ -1,9 +1,16 @@
-<div class="d-flex justify-content-center">
-   <video id="App-Video" #droneVideo class="video-js vjs-default-skin" controls playsinline width="800" height="500">
-      <source [src]="droneLiveUrl" type="application/x-mpegurl"/>
+<mat-tab-group (selectedTabChange)="tabChanged($event)">
+  <mat-tab label="Live Stream Direct"> 
+	<div class="d-flex justify-content-center">
+   <video id="App-Video" #iphoneVideo class="video-js vjs-default-skin" controls playsinline width="800" height="500">
+      <source [src]="iPhoneLiveUrl" type="application/x-mpegurl"/>
       <p class="vjs-no-js">
          To view this video please enable JavaScript, and consider upgrading to a web browser that
          <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
       </p>
    </video>
 </div>
+ </mat-tab>
+  <mat-tab label="Live Stream RTMP"> Live Stream RTMP</mat-tab>
+  <mat-tab label="Live Object Detection Direct">Live Object Detection Direct</mat-tab> 
+  <mat-tab label="Live Object Detection RTMP"> Live Object Detection RTMP</mat-tab>
+</mat-tab-group>
