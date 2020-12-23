@@ -1,6 +1,8 @@
 <mat-tab-group>
   <mat-tab label="Live Stream Direct"> 
-	<div class="d-flex justify-content-center">
+<div class="m-2">Live Stream Direct</div>
+ </mat-tab>
+  <mat-tab label="Live Stream RTMP"> 	<div class="d-flex justify-content-center">
    <video id="App-Video" #iphoneVideo class="video-js vjs-default-skin" controls playsinline width="800" height="500">
       <source [src]="iPhoneLiveUrl" type="application/x-mpegurl"/>
       <p class="vjs-no-js">
@@ -8,9 +10,7 @@
          <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
       </p>
    </video>
-</div>
- </mat-tab>
-  <mat-tab label="Live Stream RTMP"> Live Stream RTMP</mat-tab>
-  <mat-tab label="Live Object Detection Direct">Live Object Detection Direct</mat-tab> 
-  <mat-tab label="Live Object Detection RTMP"> Live Object Detection RTMP</mat-tab>
+</div></mat-tab>
+  <mat-tab label="Live Object Detection Direct"><div class="m-2">Live Object Detection Direct</div></mat-tab> 
+  <mat-tab label="Live Object Detection RTMP"><div class="m-2"> Live Object Detection RTMP</div></mat-tab>
 </mat-tab-group>
