@@ -127,15 +127,15 @@ export class WebCamLiveComponent implements OnInit {
 
     const ctx = canvas.getContext("2d");
 
-    canvas.width = 300;
-    canvas.height = 300;
+    canvas.width = 640;
+    canvas.height = 480;
 
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     // Font options.
     const font = "16px sans-serif";
     ctx.font = font;
     ctx.textBaseline = "top";
-    ctx.drawImage(this.liveDetectionVideoElem, 0, 0, 300, 300);
+    ctx.drawImage(this.liveDetectionVideoElem, 0, 0, 640, 480);
 
     predictions.forEach(prediction => {
       const x = prediction.bbox[0];

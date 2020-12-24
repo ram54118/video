@@ -15,7 +15,7 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-   canActivate: [AuthGuard],
+     canActivate: [AuthGuard],
     component: DashboardComponent,
     children: [
       { path: 'webcamLive', component: WebCamLiveComponent },

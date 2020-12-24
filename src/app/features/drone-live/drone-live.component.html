@@ -10,5 +10,22 @@
    </video>
 </div>
  </mat-tab>
-  <mat-tab label="Live Object Detection"> <div class="m-2">Live Object Detection</div></mat-tab>
+ <mat-tab label="Live Object Detection"> 
+     	<div class="d-flex justify-content-center m-2">
+      <video
+      id="liveDetectionVideo"
+      width="800"
+      height="500"
+      style="position: fixed;"
+      muted
+      controls
+    ></video>
+   <canvas
+      id="canvas-live-detection"
+      width="800"
+      height="500"
+      style="position: fixed;"
+    ></canvas>
+</div>
+  </mat-tab>
 </mat-tab-group>
