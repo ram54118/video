@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as data from './../../../assets/configuration/config.json';
 import videojs from 'video.js';
-import * as cocoSSD from '@tensorflow-models/coco-ssd';
-import { models } from '@tensorflow/tfjs';
 import * as Hls from 'hls.js';
+import * as tf from '@tensorflow/tfjs';
+import * as cocoSSD from '@tensorflow-models/coco-ssd';
 @Component({
   selector: 'app-drone-live',
   templateUrl: './drone-live.component.html',
@@ -47,7 +47,7 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     if (event.index === 0) {
       // this.initCamera();
     } else {
-     // this.webcam_init();
+      this.webcam_init();
       
     }
   }
@@ -72,11 +72,13 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   public async predictWithCocoModel() {
-    const model = await cocoSSD.load();
+    const model = await tf.loadLayersModel('./../assets/model_web/model.json');
+    
     this.detectFrame(this.liveDetectionVideoElem, model);
     console.log('model loaded');
   }
   detectFrame = (video, model) => {
+    console.log('model', model);
     model.detect(video).then(predictions => {
       this.renderPredictions(predictions);
       requestAnimationFrame(() => {

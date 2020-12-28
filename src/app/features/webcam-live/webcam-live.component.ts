@@ -109,7 +109,7 @@ export class WebCamLiveComponent implements OnInit {
       });
   }
   public async predictWithCocoModel() {
-    const model = await cocoSSD.load('lite_mobilenet_v2');
+    const model = await cocoSSD.load({ base: 'lite_mobilenet_v2'});
     this.detectFrame(this.liveDetectionVideoElem, model);
     console.log('model loaded');
   }

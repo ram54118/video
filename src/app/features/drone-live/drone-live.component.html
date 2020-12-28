@@ -1,4 +1,4 @@
-<mat-tab-group>
+<mat-tab-group (selectedTabChange)="tabChanged($event)">
   <mat-tab label="Live Stream"> 
 	<div class="d-flex justify-content-center m-2">
    <video id="App-Video" #droneVideo class="video-js vjs-default-skin" controls playsinline width="800" height="500">
