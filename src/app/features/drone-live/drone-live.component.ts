@@ -58,7 +58,7 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     this.liveDetectionVideoElem = <HTMLVideoElement>document.getElementById("liveDetectionVideo");
     this.liveDetectionVideoElem.addEventListener("loadeddata", () => {
       console.log('video playing');
-      this.predictWithCocoModel();
+       this.predictWithCocoModel();
     });
 
     if (Hls.isSupported()) {
@@ -72,7 +72,7 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   public async predictWithCocoModel() {
-    const model = await tf.loadLayersModel('./../assets/model_web/model.json');
+    const model = await tf.loadLayersModel('./../assets/Tensorflow2Converted/model.json');
     
     this.detectFrame(this.liveDetectionVideoElem, model);
     console.log('model loaded');
