@@ -1,9 +1,10 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import * as data from './../../../assets/configuration/config.json';
-import videojs from 'video.js';
-import * as Hls from 'hls.js';
-import * as tf from '@tensorflow/tfjs';
 import * as cocoSSD from '@tensorflow-models/coco-ssd';
+import * as Hls from 'hls.js';
+import videojs from 'video.js';
+import * as data from './../../../assets/configuration/config.json';
+import * as tf from '@tensorflow/tfjs';
+
 @Component({
   selector: 'app-drone-live',
   templateUrl: './drone-live.component.html',
@@ -11,7 +12,6 @@ import * as cocoSSD from '@tensorflow-models/coco-ssd';
 })
 export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("droneVideo", { static: true }) public droneVideoElem: ElementRef;
-  private liveDetectionVideoElem: HTMLVideoElement;
   public droneLiveUrl: string;
   private player;
   constructor() { }
@@ -47,6 +47,7 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     if (event.index === 0) {
       // this.initCamera();
     } else {
+      console.log('Using TensorFlow backend: ', tf.getBackend());
       this.webcam_init();
       
     }
@@ -55,76 +56,73 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
   webcam_init() {
     const LIVE_STREAM_URL =
       "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8";
-    this.liveDetectionVideoElem = <HTMLVideoElement>document.getElementById("liveDetectionVideo");
-    this.liveDetectionVideoElem.addEventListener("loadeddata", () => {
-      console.log('video playing');
-       this.predictWithCocoModel();
+    const video: any = document.getElementById("video");
+    video.addEventListener("loadeddata", () => {
+      cocoSSD.load({ modelUrl: './../assets/model_web/model.json'}).then((model) => {
+        console.log('model', model);
+        this.detectFrame(model)
+      });
     });
 
     if (Hls.isSupported()) {
       const config = { liveDurationInfinity: true };
       const hls = new Hls(config);
       hls.loadSource(LIVE_STREAM_URL);
-      hls.attachMedia(this.liveDetectionVideoElem);
+      hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED, function () {
-        this.liveDetectionVideoElem.play();
+        video.play();
+      });
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = LIVE_STREAM_URL;
+      video.addEventListener("loadedmetadata", function () {
+        video.play();
       });
     }
   }
-  public async predictWithCocoModel() {
-    const model = await tf.loadLayersModel('./../assets/Tensorflow2Converted/model.json');
-    
-    this.detectFrame(this.liveDetectionVideoElem, model);
-    console.log('model loaded');
-  }
-  detectFrame = (video, model) => {
-    console.log('model', model);
-    model.detect(video).then(predictions => {
-      this.renderPredictions(predictions);
-      requestAnimationFrame(() => {
-        this.detectFrame(video, model);
-      });
+
+  private async detectFrame(model) {
+    const video: any = document.getElementById("video");
+    const predictions = await model.detect(video);
+    this. renderPredictions(predictions);
+    requestAnimationFrame(() => {
+      this.detectFrame(model);
     });
-  }
+  };
 
-  renderPredictions = predictions => {
-    const canvas = <HTMLCanvasElement>document.getElementById("canvas-live-detection");
-
+  private renderPredictions(predictions){
+    const canvas = <HTMLCanvasElement>document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
-
-    canvas.width = 640;
-    canvas.height = 480;
-
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     // Font options.
     const font = "16px sans-serif";
     ctx.font = font;
     ctx.textBaseline = "top";
-    ctx.drawImage(this.liveDetectionVideoElem, 0, 0, 640, 480);
-
-    predictions.forEach(prediction => {
+    predictions.forEach((prediction) => {
       const x = prediction.bbox[0];
       const y = prediction.bbox[1];
       const width = prediction.bbox[2];
       const height = prediction.bbox[3];
+      const label = `${prediction.class}: ${prediction.score.toFixed(2)}`;
       // Draw the bounding box.
-      ctx.strokeStyle = "#00FFFF";
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#FFFF3F";
+      ctx.lineWidth = 5;
       ctx.strokeRect(x, y, width, height);
       // Draw the label background.
-      ctx.fillStyle = "#00FFFF";
-      const textWidth = ctx.measureText(prediction.class).width;
+      ctx.fillStyle = "#FFFF3F";
+      const textWidth = ctx.measureText(label).width;
       const textHeight = parseInt(font, 10); // base 10
       ctx.fillRect(x, y, textWidth + 4, textHeight + 4);
     });
 
-    predictions.forEach(prediction => {
+    predictions.forEach((prediction) => {
       const x = prediction.bbox[0];
       const y = prediction.bbox[1];
+      const label = `${prediction.class}: ${prediction.score.toFixed(2)}`;
       // Draw the text last to ensure it's on top.
       ctx.fillStyle = "#000000";
-      ctx.fillText(prediction.class, x, y);
+      ctx.fillText(label, x, y);
     });
   };
 
+  
 }
