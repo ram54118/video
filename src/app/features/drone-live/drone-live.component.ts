@@ -19,6 +19,7 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     const liveurls = (data as any).default;
     console.log('liveurls', liveurls);
     this.droneLiveUrl = liveurls ? liveurls.droneLiveUrl : null;
+    console.log('Using TensorFlow backend: ', tf.getBackend());
   }
 
   ngAfterViewInit() {
@@ -44,26 +45,44 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   tabChanged(event) {
-    if (event.index === 0) {
-      // this.initCamera();
+    if (event.index === 2) {
+      this.initGenericDetection();
     } else {
-      console.log('Using TensorFlow backend: ', tf.getBackend());
-      this.webcam_init();
-      
+      this.liveInit();
     }
   }
 
-  webcam_init() {
+  initGenericDetection(){
+    const canvas = <HTMLCanvasElement>document.getElementById("genericCanvas");
+    const LIVE_STREAM_URL =
+      "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8";
+    const video: any = document.getElementById("genericVideo");
+    video.addEventListener("loadeddata", () => {
+      cocoSSD.load({ base: 'lite_mobilenet_v2' }).then((model) => {
+        console.log('model', model);
+        this.detectFrame(model, video, canvas)
+      });
+    });
+
+    this.initHLS(video, LIVE_STREAM_URL);
+  }
+
+  liveInit() {
+    const canvas = <HTMLCanvasElement>document.getElementById("canvas");
     const LIVE_STREAM_URL =
       "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8";
     const video: any = document.getElementById("video");
     video.addEventListener("loadeddata", () => {
-      cocoSSD.load({ modelUrl: './../assets/model_web/model.json'}).then((model) => {
+      cocoSSD.load({ modelUrl: './../assets/model_web/model.json', base: 'lite_mobilenet_v2'}).then((model) => {
         console.log('model', model);
-        this.detectFrame(model)
+        this.detectFrame(model, video, canvas)
       });
     });
 
+    this.initHLS(video, LIVE_STREAM_URL);
+  }
+
+  private initHLS(video, LIVE_STREAM_URL){
     if (Hls.isSupported()) {
       const config = { liveDurationInfinity: true };
       const hls = new Hls(config);
@@ -80,17 +99,16 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private async detectFrame(model) {
-    const video: any = document.getElementById("video");
+  private async detectFrame(model, video, canvas) {
     const predictions = await model.detect(video);
-    this. renderPredictions(predictions);
+    this.renderPredictions(predictions, canvas);
     requestAnimationFrame(() => {
-      this.detectFrame(model);
+      this.detectFrame(model, video, canvas);
     });
   };
 
-  private renderPredictions(predictions){
-    const canvas = <HTMLCanvasElement>document.getElementById("canvas");
+  private renderPredictions(predictions, canvas){
+   // const canvas = <HTMLCanvasElement>document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     // Font options.

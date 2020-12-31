@@ -13,4 +13,11 @@ html {
     height: 36px;
     font-size: 1.4rem;
   }
+  .mat-tab-label-active{
+    opacity: 1;
+  }
+  .mat-ink-bar{
+    background-color: #0077b8 !important;
+    height: 3px;
+  }
 }
