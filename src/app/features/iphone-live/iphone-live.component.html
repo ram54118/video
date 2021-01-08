@@ -1,16 +1,43 @@
-<mat-tab-group>
-  <mat-tab label="Live Stream Direct"> 
-<div class="m-2">Live Stream Direct</div>
- </mat-tab>
-  <mat-tab label="Live Stream RTMP"> 	<div class="d-flex justify-content-center">
-   <video id="App-Video" #iphoneVideo class="video-js vjs-default-skin" controls playsinline width="800" height="500">
-      <source [src]="iPhoneLiveUrl" type="application/x-mpegurl"/>
-      <p class="vjs-no-js">
-         To view this video please enable JavaScript, and consider upgrading to a web browser that
-         <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-      </p>
-   </video>
-</div></mat-tab>
-  <mat-tab label="Live Object Detection Direct"><div class="m-2">Live Object Detection Direct</div></mat-tab> 
-  <mat-tab label="Live Object Detection RTMP"><div class="m-2"> Live Object Detection RTMP</div></mat-tab>
+<mat-tab-group (selectedTabChange)="tabChanged($event)">
+  <ng-container *ngFor="let tab of tabs">
+    <mat-tab [label]="tab.label">
+      <ng-container [ngSwitch]="tab.value">
+        <ng-container *ngSwitchCase="'iphoneStream'">
+          <div class="d-flex flex-column align-items-center justify-content-center m-2">
+            <video id="iPhoneStreamVideo" class="vid m-2" autoplay></video>
+            <div class="action-buttons" *ngIf="isLiveVideoLoaded">
+              <button type="button" style="margin-right: 20px;" class="btn btn-primary" (click)="startRecording()" [disabled]="recordingStarted">
+                Start feed
+              </button>
+              <button type="button" style="margin-right: 20px;" class="btn btn-primary" (click)="stopRecording()" [disabled]="!recordingStarted">
+                Stop Feed
+              </button>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'liveDirectStream'">
+          <div class="d-flex justify-content-center">
+            <video id="directFeed" class="vid m-2" autoplay></video>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'liveStreamRTMP'">
+          <div class="d-flex justify-content-center">
+            <video id="live-stream-rtmp-video" #iphoneVideo class="video-js vjs-default-skin" controls playsinline width="800" height="500">
+              <source [src]="iPhoneLiveUrl" type="application/x-mpegurl" />
+              <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading to a web browser that
+                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+              </p>
+            </video>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'liveObjectDetection'">
+          <div class="m-2">Live Object Detection Direct</div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'liveObjectDetectionRTMP'">
+          <div class="m-2">Live Object Detection RTMP</div>
+        </ng-container>
+      </ng-container>
+    </mat-tab>
+  </ng-container>
 </mat-tab-group>

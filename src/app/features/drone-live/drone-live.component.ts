@@ -42,6 +42,14 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.player) {
       this.player.dispose();
     }
+    const genericVideo: any = document.getElementById('genericVideo');
+    if (genericVideo) {
+      genericVideo.src = '';
+    }
+    const video: any = document.getElementById('video');
+    if (video) {
+      video.src = '';
+    }
   }
 
   tabChanged(event) {
@@ -79,7 +87,7 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
     const LIVE_STREAM_URL = 'https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8';
     const video: any = document.getElementById('video');
     video.addEventListener('loadeddata', () => {
-      cocoSSD.load({ modelUrl: './../assets/web_model/model.json', base: 'lite_mobilenet_v2' }).then((model) => {
+      cocoSSD.load({ modelUrl: './../assets/model_web/model.json', base: 'lite_mobilenet_v2' }).then((model) => {
         console.log('model', model);
         this.detectFrame(model, video, canvas);
       });
@@ -106,7 +114,7 @@ export class DroneLiveComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private async detectFrame(model, video, canvas) {
-    if (video) {
+    if (video.src.indexOf('blob') !== -1) {
       const predictions = await model.detect(video);
       this.renderPredictions(predictions, canvas);
       requestAnimationFrame(() => {
