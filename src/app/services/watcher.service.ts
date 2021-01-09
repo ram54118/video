@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
+import {Injectable} from '@angular/core';
+import {Socket} from 'ngx-socket-io';
 
 @Injectable()
 export class WatcherService {
@@ -47,8 +47,8 @@ export class WatcherService {
       this.socket.emit('watcher');
     });
 
-    this.socket.on('broadcaster', () => {
+  //  this.socket.on('broadcaster', () => {
       this.socket.emit('watcher');
-    });
+    // `});
   }
 }

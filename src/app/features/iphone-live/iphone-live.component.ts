@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { DeviceInfoService } from 'src/app/services/device-info.service';
-import { IoService } from 'src/app/services/io.service';
-import { WatcherService } from 'src/app/services/watcher.service';
+import {AfterViewInit, Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {Socket} from 'ngx-socket-io';
+import {DeviceInfoService} from 'src/app/services/device-info.service';
+import {IoService} from 'src/app/services/io.service';
+import {WatcherService} from 'src/app/services/watcher.service';
 import videojs from 'video.js';
 import * as data from './../../../assets/configuration/config.json';
 
@@ -21,10 +22,11 @@ export class IphoneLiveComponent extends DeviceInfoService implements OnInit, Af
 
   public recordingStarted = false;
   public isLiveVideoLoaded = false;
-  constructor(private renderer: Renderer2, private ioService: IoService, private watcherService: WatcherService) {
+  constructor(private renderer: Renderer2, private ioService: IoService, private watcherService: WatcherService, private socket: Socket) {
     super();
   }
   ngOnInit() {
+   // this.watcherService.emitWatcher();
     if (this.isIOSDevice()) {
       this.tabs = [
         {
@@ -59,6 +61,7 @@ export class IphoneLiveComponent extends DeviceInfoService implements OnInit, Af
     const liveurls = (data as any).default;
     this.iPhoneLiveUrl = liveurls ? liveurls.iPhoneLiveUrl : null;
     // this.initCamera();
+    // this.getDirectFeed();
   }
   tabChanged(event) {
     if (this.isIOSDevice()) {
@@ -92,6 +95,7 @@ export class IphoneLiveComponent extends DeviceInfoService implements OnInit, Af
   }
 
   private getDirectFeed() {
+    this.socket.fromEvent('broadcaster').subscribe(ev => console.log('ada', ev));
     this.watcherService.establishConnection(document.querySelector('#directFeed'));
   }
 
