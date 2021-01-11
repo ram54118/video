@@ -1,23 +1,18 @@
-import { Injectable } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
+import {Injectable} from '@angular/core';
+import {Socket} from 'ngx-socket-io';
 
 @Injectable()
 export class IoService {
-  constructor(private socket: Socket) {}
+  constructor(private socket: Socket) {
+  }
 
   establishConnection(videoElement: HTMLVideoElement) {
-    //  this.socket = io.connect(window.location.origin);
     const peerConnections = {};
     const config = {
       iceServers: [
         {
           urls: 'stun:stun.l.google.com:19302',
         },
-        // {
-        //   "urls": "turn:TURN_IP?transport=tcp",
-        //   "username": "TURN_USERNAME",
-        //   "credential": "TURN_CREDENTIALS"
-        // }
       ],
     };
     this.socket.on('answer', (id, description) => {

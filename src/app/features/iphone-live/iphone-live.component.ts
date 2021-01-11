@@ -1,5 +1,4 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
-import {Socket} from 'ngx-socket-io';
 import {DeviceInfoService} from 'src/app/services/device-info.service';
 import {IoService} from 'src/app/services/io.service';
 import {WatcherService} from 'src/app/services/watcher.service';
@@ -22,11 +21,11 @@ export class IphoneLiveComponent extends DeviceInfoService implements OnInit, Af
 
   public recordingStarted = false;
   public isLiveVideoLoaded = false;
-  constructor(private renderer: Renderer2, private ioService: IoService, private watcherService: WatcherService, private socket: Socket) {
+  private isDirectFeedLoaded = false;
+  constructor(private renderer: Renderer2, private ioService: IoService, private watcherService: WatcherService) {
     super();
   }
   ngOnInit() {
-   // this.watcherService.emitWatcher();
     if (this.isIOSDevice()) {
       this.tabs = [
         {
@@ -60,9 +59,9 @@ export class IphoneLiveComponent extends DeviceInfoService implements OnInit, Af
     }
     const liveurls = (data as any).default;
     this.iPhoneLiveUrl = liveurls ? liveurls.iPhoneLiveUrl : null;
-    // this.initCamera();
     // this.getDirectFeed();
   }
+
   tabChanged(event) {
     if (this.isIOSDevice()) {
       this.initCamera();
@@ -88,15 +87,16 @@ export class IphoneLiveComponent extends DeviceInfoService implements OnInit, Af
         this.initCamera();
       }
 
-      if (event.index === 0) {
+      if (event.index === 0 && !this.isDirectFeedLoaded) {
         this.getDirectFeed();
       }
     }
   }
 
   private getDirectFeed() {
-    this.socket.fromEvent('broadcaster').subscribe(ev => console.log('ada', ev));
+  //  this.socket.fromEvent('broadcaster').subscribe(ev => console.log('ada', ev));
     this.watcherService.establishConnection(document.querySelector('#directFeed'));
+    this.isDirectFeedLoaded = true;
   }
 
   ngAfterViewInit() {
